@@ -790,9 +790,9 @@ static void process_input(struct callback_data *p, FILE *in);
 ** Make sure the database is open.  If it is not, then open it.  If
 ** the database fails to open, print an error message and exit.
 */
-static void open_db(struct callback_data *p){
+static void open_db(struct callback_data *p){//如果数据库没有打开就打开，如果已经打开就不要打开
   if( p->db==0 ){
-    sqlite3_open(p->zDbFilename, &p->db);
+    sqlite3_open(p->zDbFilename, &p->db);//这个函数在main.c中实现的
     db = p->db;
     sqlite3_create_function(db, "shellstatic", 0, SQLITE_UTF8, 0,
         shellstaticFunc, 0, 0);
@@ -1627,6 +1627,7 @@ static void usage(int showDetail){
 
 /*
 ** Initialize the state information in data
+* 设置默认的回显形式
 */
 static void main_init(struct callback_data *data) {
   memset(data, 0, sizeof(*data));
@@ -1639,7 +1640,7 @@ static void main_init(struct callback_data *data) {
 
 int main(int argc, char **argv){
   char *zErrMsg = 0;
-  struct callback_data data;
+  struct callback_data data;//回显参数
   const char *zInitFile = 0;
   char *zFirstCmd = 0;
   int i;
@@ -1649,7 +1650,7 @@ int main(int argc, char **argv){
 #endif
 
   Argv0 = argv[0];
-  main_init(&data);
+  main_init(&data);//设置默认的回显形式
 
   /* Make sure we have a valid signal handler early, before anything
   ** else is done.
@@ -1675,7 +1676,7 @@ int main(int argc, char **argv){
     }
   }
   if( i<argc ){
-    data.zDbFilename = argv[i++];
+    data.zDbFilename = argv[i++];//取数据库的名，如果没有，默认为内存数据库
   }else{
 #ifndef SQLITE_OMIT_MEMORYDB
     data.zDbFilename = ":memory:";
@@ -1700,7 +1701,7 @@ int main(int argc, char **argv){
   ** files from being created if a user mistypes the database name argument
   ** to the sqlite command-line tool.
   */
-  if( access(data.zDbFilename, 0)==0 ){
+  if( access(data.zDbFilename, 0)==0 ){//如果数据库文件存在，则打开它，如果不存在，先不打开，可以放在用户因错误输入而创建空文件
     open_db(&data);
   }
 
@@ -1759,7 +1760,7 @@ int main(int argc, char **argv){
       exit(0);
     }else{
       int rc;
-      open_db(&data);
+      open_db(&data);//打开数据库，open_db()这个函数就在shell.c中
       rc = sqlite3_exec(data.db, zFirstCmd, callback, &data, &zErrMsg);
       if( rc!=0 && zErrMsg!=0 ){
         fprintf(stderr,"SQL error: %s\n", zErrMsg);
@@ -1794,6 +1795,6 @@ int main(int argc, char **argv){
     }
   }
   set_table_name(&data, 0);
-  if( db ) sqlite3_close(db);
+  if( db ) sqlite3_close(db);//关闭数据库
   return 0;
 }

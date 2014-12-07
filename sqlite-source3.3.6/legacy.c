@@ -32,11 +32,11 @@
 ** is invoked, even for queries.
 */
 int sqlite3_exec(
-  sqlite3 *db,                /* The database on which the SQL executes */
-  const char *zSql,           /* The SQL to be executed */
-  sqlite3_callback xCallback, /* Invoke this callback routine */
-  void *pArg,                 /* First argument to xCallback() */
-  char **pzErrMsg             /* Write error messages here */
+  sqlite3 *db,                /* The database on which the SQL executes *///一个打开的数据库连接
+  const char *zSql,           /* The SQL to be executed *///要执行的sql
+  sqlite3_callback xCallback, /* Invoke this callback routine *///回调函数
+  void *pArg,                 /* First argument to xCallback() *///传递给xCallback的第一个参数
+  char **pzErrMsg             /* Write error messages here *///写入错误的信息
 ){
   int rc = SQLITE_OK;
   const char *zLeftover;

@@ -796,7 +796,7 @@ static int createCollation(
 ** sqlite3_open() and sqlite3_open16(). The database filename "zFilename"  
 ** is UTF-8 encoded.
 */
-static int openDatabase(
+static int openDatabase(//打开一个数据库
   const char *zFilename, /* Database filename UTF-8 encoded */
   sqlite3 **ppDb         /* OUT: Returned database handle */
 ){
@@ -843,7 +843,7 @@ static int openDatabase(
   }
 
   /* Open the backend database driver */
-  rc = sqlite3BtreeFactory(db, zFilename, 0, MAX_PAGES, &db->aDb[0].pBt);
+  rc = sqlite3BtreeFactory(db, zFilename, 0, MAX_PAGES, &db->aDb[0].pBt);//当需要生成数据库后台驱动时候，调用sqlite3BtreeFactory()
   if( rc!=SQLITE_OK ){
     sqlite3Error(db, rc, 0);
     db->magic = SQLITE_MAGIC_CLOSED;
@@ -885,11 +885,11 @@ opendb_out:
 /*
 ** Open a new database handle.
 */
-int sqlite3_open(
+int sqlite3_open(//打开数据库
   const char *zFilename, 
   sqlite3 **ppDb 
 ){
-  return openDatabase(zFilename, ppDb);
+  return openDatabase(zFilename, ppDb);//打开数据库文件，返回sqlite3的连接
 }
 
 #ifndef SQLITE_OMIT_UTF16
