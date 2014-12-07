@@ -376,6 +376,7 @@ static void interrupt_handler(int NotUsed){
 ** This is the callback routine that the SQLite library
 ** invokes for each row of a query result.
 */
+//这个回调函数处理sql执行后的返回结果，定义了9种回显形式，通过callback_data结构来对回显参数进行配置
 static int callback(void *pArg, int nArg, char **azArg, char **azCol){
   int i;
   struct callback_data *p = (struct callback_data*)pArg;
